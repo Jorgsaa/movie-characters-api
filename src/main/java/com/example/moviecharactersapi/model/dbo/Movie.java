@@ -15,16 +15,16 @@ public class Movie {
     @GeneratedValue
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @Column
+    @Column(nullable = false)
     private String genre;
 
-    @Column
+    @Column(nullable = false)
     private Integer releaseYear;
 
-    @Column
+    @Column(nullable = false)
     private String director;
 
     @Column
