@@ -8,6 +8,7 @@ Movie character REST API built using:
 - Gradle
 - PostgreSQL
 - Docker
+- Docker compose
 - Swagger
 
 ## Table of Contents
