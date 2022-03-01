@@ -16,6 +16,11 @@ public class SeederServiceImpl implements SeederService {
     }
 
     @Override
+    public void seedFranchises() {
+
+    }
+
+    @Override
     public void seedMovies() {
 
         List<Movie> movieList = List.of(
@@ -51,11 +56,6 @@ public class SeederServiceImpl implements SeederService {
         );
 
         movies.saveAll(movieList);
-    }
-
-    @Override
-    public void seedFranchises() {
-
     }
 
     @Override
