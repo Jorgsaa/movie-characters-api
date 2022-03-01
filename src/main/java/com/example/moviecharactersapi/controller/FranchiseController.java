@@ -72,4 +72,12 @@ public class FranchiseController {
 
         return ResponseEntity.accepted().body(new Response<>(patchedFranchise));
     }
+
+    @ApiOperation("Delete a franchise by id")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response<Boolean>> update(@PathVariable Integer id) {
+        franchises.deleteById(id);
+
+        return ResponseEntity.accepted().body(new Response<>(true));
+    }
 }
