@@ -22,9 +22,8 @@ public class MovieController {
 
     @GetMapping("{id}")
     public ResponseEntity<Response<Movie>> findMovieById(@PathVariable Integer id) {
-        return movies.findById(id).map(
-                        // If found, return 200 response with movie
-                        movie -> ResponseEntity.ok(new Response<>(movie)))
+        // If found, return 200 response with movie
+        return movies.findById(id).map(movie -> ResponseEntity.ok(new Response<>(movie)))
                 // Else return 404 with error message
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
@@ -37,6 +36,33 @@ public class MovieController {
         Movie savedMovie = movies.save(movie);
         URI uri = new URI("/api/v1/movie/" + savedMovie.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedMovie));
+    }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<Response<Movie>> update(
+            @PathVariable Integer id,
+            @RequestBody Movie movie
+    ) {
+        if (!movies.existsById(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Movie with the specified id was not found"));
+
+        movie.setId(id);
+
+        Movie patchedMovie = movies.save(movie);
+
+        return ResponseEntity.accepted().body(new Response<>(patchedMovie));
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Response<Boolean>> update(@PathVariable Integer id) {
+        if (!movies.existsById(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Movie with the specified id was not found"));
+
+        movies.deleteById(id);
+
+        return ResponseEntity.accepted().body(new Response<>(true));
     }
 
 }
