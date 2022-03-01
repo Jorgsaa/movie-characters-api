@@ -1,5 +1,6 @@
 package com.example.moviecharactersapi.service;
 
+import com.example.moviecharactersapi.model.dbo.Character;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.repository.MovieRepository;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,41 @@ public class SeederServiceImpl implements SeederService {
 
     @Override
     public void seedCharacters() {
+        List<Character> characterList = List.of(
+                Character.builder()
+                        .id(1)
+                        .firstName("Frodo")
+                        .lastName("Baggins")
+                        .gender("Male")
+                        .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Elijah_Wood_as_Frodo_Baggins.png/170px-Elijah_Wood_as_Frodo_Baggins.png")
+                        .build(),
 
+                Character.builder()
+                        .id(2)
+                        .firstName("Gandalf")
+                        .gender("Male")
+                        .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Gandalf600ppx.jpg/170px-Gandalf600ppx.jpg")
+                        .build(),
+
+                Character.builder()
+                        .id(3)
+                        .firstName("Aragorn")
+                        .lastName("II")
+                        .gender("Male")
+                        .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Aragorn300ppx.png/170px-Aragorn300ppx.png")
+                        .build(),
+
+                Character.builder()
+                        .id(3)
+                        .firstName("Arwen")
+                        .lastName("Undómiel")
+                        .gender("Female")
+                        .pictureURL("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Arwen_by_Anna_Kulisz.jpg/220px-Arwen_by_Anna_Kulisz.jpg")
+                        .build()
+        );
+
+        //TODO: when repository is implemented and injected
+        // characters.saveAll(characterList);
     }
 
 }
