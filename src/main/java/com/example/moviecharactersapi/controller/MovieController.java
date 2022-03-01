@@ -3,6 +3,9 @@ package com.example.moviecharactersapi.controller;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.MovieRepository;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ public class MovieController {
         this.movies = movies;
     }
 
+    @ApiOperation("Find a movie by id")
     @GetMapping("{id}")
     public ResponseEntity<Response<Movie>> findMovieById(@PathVariable Integer id) {
         // If found, return 200 response with movie
@@ -30,6 +34,7 @@ public class MovieController {
                         .body(new Response<>("Movie with the specified id was not found")));
     }
 
+    @ApiOperation("Add a movie")
     @SneakyThrows
     @PostMapping
     public ResponseEntity<Response<Movie>> save(@RequestBody Movie movie) {
@@ -38,6 +43,7 @@ public class MovieController {
         return ResponseEntity.created(uri).body(new Response<>(savedMovie));
     }
 
+    @ApiOperation("Update a movie by id")
     @PatchMapping("{id}")
     public ResponseEntity<Response<Movie>> update(
             @PathVariable Integer id,
@@ -54,6 +60,7 @@ public class MovieController {
         return ResponseEntity.accepted().body(new Response<>(patchedMovie));
     }
 
+    @ApiOperation("Delete a movie by id")
     @DeleteMapping("{id}")
     public ResponseEntity<Response<Boolean>> update(@PathVariable Integer id) {
         if (!movies.existsById(id))
