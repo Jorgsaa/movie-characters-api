@@ -2,6 +2,7 @@ package com.example.moviecharactersapi.service;
 
 import com.example.moviecharactersapi.model.dbo.Character;
 import com.example.moviecharactersapi.model.dbo.Movie;
+import com.example.moviecharactersapi.repository.FranchiseRepository;
 import com.example.moviecharactersapi.repository.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,11 @@ import java.util.List;
 @Service
 public class SeederServiceImpl implements SeederService {
 
+    private final FranchiseRepository franchises;
     private final MovieRepository movies;
 
-    public SeederServiceImpl(MovieRepository movies) {
+    public SeederServiceImpl(FranchiseRepository franchises, MovieRepository movies) {
+        this.franchises = franchises;
         this.movies = movies;
     }
 
