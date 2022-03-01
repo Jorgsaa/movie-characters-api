@@ -1,7 +1,6 @@
 package com.example.moviecharactersapi.controller;
 
 import com.example.moviecharactersapi.model.dbo.Franchise;
-import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import io.swagger.annotations.ApiOperation;
