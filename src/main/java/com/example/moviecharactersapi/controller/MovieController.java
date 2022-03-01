@@ -38,6 +38,10 @@ public class MovieController {
     @SneakyThrows
     @PostMapping
     public ResponseEntity<Response<Movie>> save(@RequestBody Movie movie) {
+        if (movie == null)
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid movie object supplied"));
+
         Movie savedMovie = movies.save(movie);
         URI uri = new URI("/api/v1/movie/" + savedMovie.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedMovie));
@@ -49,6 +53,10 @@ public class MovieController {
             @PathVariable Integer id,
             @RequestBody Movie movie
     ) {
+        if (movie == null)
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid movie object supplied"));
+
         if (!movies.existsById(id))
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Movie with the specified id was not found"));
