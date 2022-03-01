@@ -51,4 +51,25 @@ public class FranchiseController {
         URI uri = new URI("/api/v1/franchise/" + savedFranchise.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedFranchise));
     }
+
+    @ApiOperation("Update a franchise by id")
+    @PatchMapping("/{id}")
+    public ResponseEntity<Response<Franchise>> updateFranchise(
+            @PathVariable Integer id,
+            @RequestBody(required = false) Franchise franchise
+    ) {
+        if (franchise == null)
+            return ResponseEntity.badRequest()
+                    .body(new Response<>("Invalid franchise object supplied"));
+
+        if (!franchises.existsById(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Franchise with the specified id was not found"));
+
+        franchise.setId(id);
+
+        Franchise patchedFranchise = franchises.save(franchise);
+
+        return ResponseEntity.accepted().body(new Response<>(patchedFranchise));
+    }
 }
