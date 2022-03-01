@@ -46,6 +46,7 @@ public class FranchiseController {
                     .body(new Response<>("Invalid franchise object supplied"));
         }
 
+        // Save franchise and return URI of the saved franchise
         Franchise savedFranchise = franchises.save(franchise);
         URI uri = new URI("/api/v1/franchise/" + savedFranchise.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedFranchise));
