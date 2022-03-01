@@ -37,7 +37,9 @@ public class MovieController {
     @ApiOperation("Add a movie")
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<Response<Movie>> save(@RequestBody Movie movie) {
+    public ResponseEntity<Response<Movie>> save(
+            @RequestBody(required = false) Movie movie
+    ) {
         if (movie == null)
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid movie object supplied"));
@@ -51,7 +53,7 @@ public class MovieController {
     @PatchMapping("{id}")
     public ResponseEntity<Response<Movie>> update(
             @PathVariable Integer id,
-            @RequestBody Movie movie
+            @RequestBody(required = false) Movie movie
     ) {
         if (movie == null)
             return ResponseEntity.badRequest()
