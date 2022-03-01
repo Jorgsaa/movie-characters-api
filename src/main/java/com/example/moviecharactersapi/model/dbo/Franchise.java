@@ -20,7 +20,7 @@ public class Franchise {
     private Integer id;
 
     @Column(nullable = false, length = 40)
-    private String Name;
+    private String name;
 
     @Column(length = 80)
     private String description;
