@@ -1,7 +1,9 @@
 package com.example.moviecharactersapi.service;
 
 import com.example.moviecharactersapi.model.dbo.Character;
+import com.example.moviecharactersapi.model.dbo.Franchise;
 import com.example.moviecharactersapi.model.dbo.Movie;
+import com.example.moviecharactersapi.repository.FranchiseRepository;
 import com.example.moviecharactersapi.repository.MovieRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,15 +12,38 @@ import java.util.List;
 @Service
 public class SeederServiceImpl implements SeederService {
 
+    private final FranchiseRepository franchises;
     private final MovieRepository movies;
 
-    public SeederServiceImpl(MovieRepository movies) {
+    public SeederServiceImpl(FranchiseRepository franchises, MovieRepository movies) {
+        this.franchises = franchises;
         this.movies = movies;
     }
 
     @Override
     public void seedFranchises() {
 
+        List<Franchise> franchiseList = List.of(
+                Franchise.builder()
+                        .id(1)
+                        .name("The Lord of the Rings")
+                        .description("Heroes set forth to save their world from evil")
+                        .build(),
+
+                Franchise.builder()
+                        .id(2)
+                        .name("James Bond")
+                        .description("Secret agent having sex before saving the day")
+                        .build(),
+
+                Franchise.builder()
+                        .id(3)
+                        .name("Star Wars")
+                        .description("A group of Jedis and alies vs the Galactic Empire")
+                        .build()
+        );
+
+        franchises.saveAll(franchiseList);
     }
 
     @Override
