@@ -88,12 +88,12 @@ public class FranchiseController {
     @ApiOperation("Delete a franchise by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Response<Boolean>> deleteFranchise(@PathVariable Integer id) {
-        boolean franchiseExists = franchises.existsById(id);
+        boolean franchiseFoundBeforeDelete = franchises.existsById(id);
 
-        if (franchiseExists) {
+        if (franchiseFoundBeforeDelete) {
             franchises.deleteById(id);
         }
 
-        return ResponseEntity.accepted().body(new Response<>(franchiseExists));
+        return ResponseEntity.accepted().body(new Response<>(franchiseFoundBeforeDelete));
     }
 }
