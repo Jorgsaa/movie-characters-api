@@ -4,7 +4,6 @@ import com.example.moviecharactersapi.model.dbo.Franchise;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@Tag(name = "Franchise")
 @RequestMapping("/api/v1/franchise")
 public class FranchiseController {
     private final FranchiseRepository franchises;
