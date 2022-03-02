@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/franchise")
@@ -29,6 +30,20 @@ public class FranchiseController {
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("Franchise with the specified id was not found")));
+    }
+
+    @ApiOperation("Find all franchises")
+    @GetMapping
+    public ResponseEntity<Response<List<Franchise>>> findAllFranchises() {
+        List<Franchise> franchiseList = franchises.findAll();
+
+        if (franchiseList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("No franchises found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(franchiseList));
     }
 
     @ApiOperation("Create new franchise")
