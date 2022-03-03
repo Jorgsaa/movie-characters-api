@@ -1,11 +1,12 @@
 package com.example.moviecharactersapi.model.dbo;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,5 +34,15 @@ public class Character {
 
     @Column
     private String pictureURL;
+
+    @Singular
+    @JsonIgnore
+    @ManyToMany(mappedBy = "characters", cascade = CascadeType.PERSIST)
+    private Set<Movie> movies = new java.util.LinkedHashSet<>();
+
+    @JsonGetter
+    public List<String> movies() {
+        return movies.stream().map(Movie::getTitle).toList();
+    }
 
 }
