@@ -18,6 +18,24 @@ public class SeederServiceImpl implements SeederService {
     private final FranchiseRepository franchises;
     private final MovieRepository movies;
     private final CharacterRepository characters;
+    public static final Character GANDALF = Character.builder()
+            .firstName("Gandalf")
+            .alias("Mithrandir")
+            .gender("Male")
+            .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Gandalf600ppx.jpg/170px-Gandalf600ppx.jpg")
+            .build();
+    public static final Character BOROMIR = Character.builder()
+            .firstName("Boromir")
+            .gender("Male")
+            .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Vlcsnap-bormir.png/300px-Vlcsnap-bormir.png")
+            .build();
+    public static final Character THEODEN = Character.builder()
+            .firstName("Théoden")
+            .lastName("Ednew")
+            .gender("Male")
+            .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/3/3a/Th%C3%A9oden600ppx.png/220px-Th%C3%A9oden600ppx.png")
+            .build();
+
     public static final Franchise THE_LORD_OF_THE_RINGS = Franchise.builder()
             .name("The Lord of the Rings")
             .description("Heroes set forth to save their world from evil")
@@ -57,23 +75,6 @@ public class SeederServiceImpl implements SeederService {
             .gender("Male")
             .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Elijah_Wood_as_Frodo_Baggins.png/170px-Elijah_Wood_as_Frodo_Baggins.png")
             .build();
-    public static final Character GANDALF = Character.builder()
-            .firstName("Gandalf")
-            .gender("Male")
-            .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/Gandalf600ppx.jpg/170px-Gandalf600ppx.jpg")
-            .build();
-    public static final Character ARAGORN = Character.builder()
-            .firstName("Aragorn")
-            .lastName("II")
-            .gender("Male")
-            .pictureURL("https://upload.wikimedia.org/wikipedia/en/thumb/3/35/Aragorn300ppx.png/170px-Aragorn300ppx.png")
-            .build();
-    public static final Character ARWEN = Character.builder()
-            .firstName("Arwen")
-            .lastName("Undómiel")
-            .gender("Female")
-            .pictureURL("https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Arwen_by_Anna_Kulisz.jpg/220px-Arwen_by_Anna_Kulisz.jpg")
-            .build();
 
     @Override
     public void seedFranchises() {
@@ -91,9 +92,9 @@ public class SeederServiceImpl implements SeederService {
     public void seedMovies() {
 
         List<Movie> movieList = List.of(
-                THE_FELLOWSHIP_OF_THE_RING.characters(List.of(FRODO, ARAGORN)).build(),
-                THE_TWO_TOWERS.characters(List.of(FRODO, GANDALF)).build(),
-                THE_RETURN_OF_THE_KING.characters(List.of(ARWEN)).build()
+                THE_FELLOWSHIP_OF_THE_RING.characters(List.of(FRODO, GANDALF, BOROMIR)).build(),
+                THE_TWO_TOWERS.characters(List.of(FRODO, GANDALF, BOROMIR, THEODEN)).build(),
+                THE_RETURN_OF_THE_KING.characters(List.of(FRODO, GANDALF, THEODEN)).build()
         );
 
         movies.saveAll(movieList);
@@ -101,11 +102,12 @@ public class SeederServiceImpl implements SeederService {
 
     @Override
     public void seedCharacters() {
+
         List<Character> characterList = List.of(
                 FRODO,
                 GANDALF,
-                ARAGORN,
-                ARWEN
+                BOROMIR,
+                THEODEN
         );
 
         characters.saveAll(characterList);
