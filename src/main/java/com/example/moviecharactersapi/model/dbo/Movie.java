@@ -1,11 +1,12 @@
 package com.example.moviecharactersapi.model.dbo;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,5 +37,29 @@ public class Movie {
 
     @Column
     private String trailerURL;
+
+    @Singular
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.PERSIST})
+    @JoinTable(name = "movie_characters",
+            joinColumns = @JoinColumn(name = "movie_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"))
+    private Set<Character> characters = new java.util.LinkedHashSet<>();
+
+    @JsonGetter
+    public Set<String> characters() {
+        return characters.stream().map(c -> {
+            StringBuilder name = new StringBuilder(c.getFirstName());
+
+            if (c.getLastName() != null)
+                name.append(" ").append(c.getLastName());
+
+            return name.toString();
+        }).collect(Collectors.toSet());
+    }
+
+    public void removeCharacter(Character character) {
+        characters.remove(character);
+    }
 
 }
