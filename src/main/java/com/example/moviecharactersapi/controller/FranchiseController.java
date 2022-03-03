@@ -48,9 +48,8 @@ public class FranchiseController {
     @ApiOperation("Create new franchise")
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<Response<Franchise>> createFranchise(
-            @RequestBody(required = false)
-                    Franchise franchise
+    public ResponseEntity<Response<Franchise>> saveFranchise(
+            @RequestBody(required = false) Franchise franchise
     ) {
         if (franchise == null) {
             return ResponseEntity.badRequest()
@@ -65,17 +64,19 @@ public class FranchiseController {
 
     @ApiOperation("Update a franchise by id")
     @PatchMapping("/{id}")
-    public ResponseEntity<Response<Franchise>> updateFranchise(
+    public ResponseEntity<Response<Franchise>> updateFranchiseById(
             @PathVariable Integer id,
             @RequestBody(required = false) Franchise franchise
     ) {
-        if (franchise == null)
+        if (franchise == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid franchise object supplied"));
+        }
 
-        if (!franchises.existsById(id))
+        if (!franchises.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Franchise with the specified id was not found"));
+        }
 
         franchise.setId(id);
 
@@ -86,14 +87,15 @@ public class FranchiseController {
 
     @ApiOperation("Delete a franchise by id")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response<Boolean>> deleteFranchise(@PathVariable Integer id) {
-        boolean franchiseFoundBeforeDelete = franchises.existsById(id);
-
-        if (franchiseFoundBeforeDelete) {
-            franchises.deleteById(id);
+    public ResponseEntity<Response<Boolean>> deleteFranchiseById(@PathVariable Integer id) {
+        if (!franchises.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Franchise with the specified id was not found"));
         }
 
-        return ResponseEntity.accepted().body(new Response<>(franchiseFoundBeforeDelete));
+        franchises.deleteById(id);
+
+        return ResponseEntity.accepted().body(new Response<>(true));
     }
 
 }

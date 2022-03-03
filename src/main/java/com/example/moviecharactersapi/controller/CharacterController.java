@@ -48,13 +48,15 @@ public class CharacterController {
     @ApiOperation("Add a character")
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<Response<Character>> save(
+    public ResponseEntity<Response<Character>> saveCharacter(
             @RequestBody(required = false) Character character
     ) {
-        if (character == null)
+        if (character == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid character object supplied"));
+        }
 
+        // Save character and return URI of the saved character
         Character savedCharacter = characters.save(character);
         URI uri = new URI("/api/v1/character/" + savedCharacter.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedCharacter));
@@ -62,17 +64,19 @@ public class CharacterController {
 
     @ApiOperation("Update a character by id")
     @PatchMapping("{id}")
-    public ResponseEntity<Response<Character>> update(
+    public ResponseEntity<Response<Character>> updateCharacterById(
             @PathVariable Integer id,
             @RequestBody(required = false) Character character
     ) {
-        if (character == null)
+        if (character == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid character object supplied"));
+        }
 
-        if (!characters.existsById(id))
+        if (!characters.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Character with the specified id was not found"));
+        }
 
         character.setId(id);
 
@@ -83,10 +87,11 @@ public class CharacterController {
 
     @ApiOperation("Delete a character by id")
     @DeleteMapping("{id}")
-    public ResponseEntity<Response<Boolean>> update(@PathVariable Integer id) {
-        if (!characters.existsById(id))
+    public ResponseEntity<Response<Boolean>> deleteCharacterById(@PathVariable Integer id) {
+        if (!characters.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Character with the specified id was not found"));
+        }
 
         // Remove character from movie
         characters.findById(id).ifPresent(character -> character.getMovies().forEach(m -> m.removeCharacter(character)));
