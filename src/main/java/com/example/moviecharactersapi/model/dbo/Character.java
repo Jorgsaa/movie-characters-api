@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -41,8 +41,8 @@ public class Character {
     private Set<Movie> movies = new java.util.LinkedHashSet<>();
 
     @JsonGetter
-    public List<String> movies() {
-        return movies.stream().map(Movie::getTitle).toList();
+    public Set<String> movies() {
+        return movies.stream().map(Movie::getTitle).collect(Collectors.toSet());
     }
 
 }
