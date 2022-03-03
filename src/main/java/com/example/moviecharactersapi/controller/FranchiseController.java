@@ -4,6 +4,7 @@ import com.example.moviecharactersapi.model.dbo.Franchise;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/franchise")
 public class FranchiseController {
-    private final FranchiseRepository franchises;
 
-    public FranchiseController(FranchiseRepository franchises) {
-        this.franchises = franchises;
-    }
+    private final FranchiseRepository franchises;
 
     @ApiOperation("Find a franchise by id")
     @GetMapping("/{id}")
@@ -51,7 +50,7 @@ public class FranchiseController {
     @PostMapping
     public ResponseEntity<Response<Franchise>> createFranchise(
             @RequestBody(required = false)
-            Franchise franchise
+                    Franchise franchise
     ) {
         if (franchise == null) {
             return ResponseEntity.badRequest()
@@ -96,4 +95,5 @@ public class FranchiseController {
 
         return ResponseEntity.accepted().body(new Response<>(franchiseFoundBeforeDelete));
     }
+
 }

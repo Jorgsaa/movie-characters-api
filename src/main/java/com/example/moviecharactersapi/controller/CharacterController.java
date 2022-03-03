@@ -1,10 +1,10 @@
 package com.example.moviecharactersapi.controller;
 
 import com.example.moviecharactersapi.model.dbo.Character;
-import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.CharacterRepository;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/character")
 public class CharacterController {
-    final CharacterRepository characters;
 
-    public CharacterController(CharacterRepository characters) {
-        this.characters = characters;
-    }
+    private final CharacterRepository characters;
 
     @ApiOperation("Find a character by id")
     @GetMapping("{id}")
@@ -78,4 +76,5 @@ public class CharacterController {
 
         return ResponseEntity.accepted().body(new Response<>(true));
     }
+
 }

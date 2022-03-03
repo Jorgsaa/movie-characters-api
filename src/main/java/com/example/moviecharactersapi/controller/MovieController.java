@@ -3,9 +3,8 @@ package com.example.moviecharactersapi.controller;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.MovieRepository;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,15 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/movie")
 public class MovieController {
 
     private final MovieRepository movies;
-
-    public MovieController(MovieRepository movies) {
-        this.movies = movies;
-    }
 
     @ApiOperation("Find a movie by id")
     @GetMapping("{id}")
