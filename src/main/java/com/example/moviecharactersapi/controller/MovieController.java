@@ -51,13 +51,15 @@ public class MovieController {
     @ApiOperation("Add a movie")
     @SneakyThrows
     @PostMapping
-    public ResponseEntity<Response<Movie>> save(
+    public ResponseEntity<Response<Movie>> saveMovie(
             @RequestBody(required = false) Movie movie
     ) {
-        if (movie == null)
+        if (movie == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid movie object supplied"));
+        }
 
+        // Save movie and return URI of the saved movie
         Movie savedMovie = movies.save(movie);
         URI uri = new URI("/api/v1/movie/" + savedMovie.getId());
         return ResponseEntity.created(uri).body(new Response<>(savedMovie));
@@ -65,17 +67,19 @@ public class MovieController {
 
     @ApiOperation("Update a movie by id")
     @PatchMapping("{id}")
-    public ResponseEntity<Response<Movie>> update(
+    public ResponseEntity<Response<Movie>> updateMovieById(
             @PathVariable Integer id,
             @RequestBody(required = false) Movie movie
     ) {
-        if (movie == null)
+        if (movie == null) {
             return ResponseEntity.badRequest()
                     .body(new Response<>("Invalid movie object supplied"));
+        }
 
-        if (!movies.existsById(id))
+        if (!movies.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Movie with the specified id was not found"));
+        }
 
         movie.setId(id);
 
@@ -86,10 +90,11 @@ public class MovieController {
 
     @ApiOperation("Delete a movie by id")
     @DeleteMapping("{id}")
-    public ResponseEntity<Response<Boolean>> update(@PathVariable Integer id) {
-        if (!movies.existsById(id))
+    public ResponseEntity<Response<Boolean>> deleteMovieById(@PathVariable Integer id) {
+        if (!movies.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Movie with the specified id was not found"));
+        }
 
         movies.deleteById(id);
 
@@ -98,7 +103,7 @@ public class MovieController {
 
     @ApiOperation("Find characters by movie id")
     @GetMapping("{id}/characters")
-    public ResponseEntity<Response<Set<Character>>> findCharactersById(@PathVariable Integer id) {
+    public ResponseEntity<Response<Set<Character>>> findMovieCharactersById(@PathVariable Integer id) {
         return movies.findById(id).map(
                 movie -> ResponseEntity.ok(new Response<>(movie.getCharacters()))
         ).orElse(
@@ -109,7 +114,7 @@ public class MovieController {
 
     @ApiOperation("Update characters by movie id")
     @PatchMapping("{id}/characters")
-    public ResponseEntity<Response<Movie>> updateCharactersById(
+    public ResponseEntity<Response<Movie>> updateMovieCharactersById(
             @PathVariable Integer id,
             @RequestBody Set<Character> characters
     ) {
