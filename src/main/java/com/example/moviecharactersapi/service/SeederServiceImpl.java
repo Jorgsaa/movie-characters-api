@@ -6,22 +6,18 @@ import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.repository.CharacterRepository;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import com.example.moviecharactersapi.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class SeederServiceImpl implements SeederService {
 
     private final FranchiseRepository franchises;
     private final MovieRepository movies;
     private final CharacterRepository characters;
-
-    public SeederServiceImpl(FranchiseRepository franchises, MovieRepository movies, CharacterRepository characters) {
-        this.franchises = franchises;
-        this.movies = movies;
-        this.characters = characters;
-    }
 
     @Override
     public void seedFranchises() {
