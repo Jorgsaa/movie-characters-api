@@ -23,6 +23,7 @@ public class CharacterController {
     @ApiOperation("Find a character by id")
     @GetMapping("{id}")
     public ResponseEntity<Response<Character>> findCharacterById(@PathVariable Integer id) {
+        // If found, return 200 response with character
         return characters.findById(id).map(character -> ResponseEntity.ok(new Response<>(character)))
                 // Else return 404 with error message
                 .orElse(ResponseEntity
