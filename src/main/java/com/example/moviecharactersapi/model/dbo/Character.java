@@ -2,7 +2,10 @@ package com.example.moviecharactersapi.model.dbo;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Setter
@@ -11,17 +14,18 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class Character {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     private Integer id;
 
     @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column
     private String lastName;
 
-    @Column(nullable = false)
+    @Column
     private String alias;
 
     @Column(nullable = false)
@@ -29,4 +33,5 @@ public class Character {
 
     @Column
     private String pictureURL;
+
 }
