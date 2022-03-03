@@ -88,6 +88,9 @@ public class CharacterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Character with the specified id was not found"));
 
+        // Remove character from movie
+        characters.findById(id).ifPresent(character -> character.getMovies().forEach(m -> m.removeCharacter(character)));
+
         characters.deleteById(id);
 
         return ResponseEntity.accepted().body(new Response<>(true));
