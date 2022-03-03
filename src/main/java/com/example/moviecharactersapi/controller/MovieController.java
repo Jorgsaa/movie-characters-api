@@ -3,25 +3,22 @@ package com.example.moviecharactersapi.controller;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.MovieRepository;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/movie")
 public class MovieController {
 
     private final MovieRepository movies;
-
-    public MovieController(MovieRepository movies) {
-        this.movies = movies;
-    }
 
     @ApiOperation("Find a movie by id")
     @GetMapping("{id}")
@@ -32,6 +29,20 @@ public class MovieController {
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("Movie with the specified id was not found")));
+    }
+
+    @ApiOperation("Find all movies")
+    @GetMapping
+    public ResponseEntity<Response<List<Movie>>> findAllMovies() {
+        List<Movie> movieList = movies.findAll();
+
+        if (movieList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("No movies found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(movieList));
     }
 
     @ApiOperation("Add a movie")

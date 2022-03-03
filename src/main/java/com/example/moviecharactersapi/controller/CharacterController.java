@@ -1,25 +1,24 @@
 package com.example.moviecharactersapi.controller;
 
 import com.example.moviecharactersapi.model.dbo.Character;
-import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.CharacterRepository;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/character")
 public class CharacterController {
-    final CharacterRepository characters;
 
-    public CharacterController(CharacterRepository characters) {
-        this.characters = characters;
-    }
+    private final CharacterRepository characters;
 
     @ApiOperation("Find a character by id")
     @GetMapping("{id}")
@@ -29,6 +28,20 @@ public class CharacterController {
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("Character with the specified id was not found")));
+    }
+
+    @ApiOperation("Find all characters")
+    @GetMapping
+    public ResponseEntity<Response<List<Character>>> findAllCharacters() {
+        List<Character> characterList = characters.findAll();
+
+        if (characterList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("No characters found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(characterList));
     }
 
     @ApiOperation("Add a character")
@@ -78,4 +91,5 @@ public class CharacterController {
 
         return ResponseEntity.accepted().body(new Response<>(true));
     }
+
 }
