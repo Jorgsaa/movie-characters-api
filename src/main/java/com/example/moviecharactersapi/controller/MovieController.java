@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +29,20 @@ public class MovieController {
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("Movie with the specified id was not found")));
+    }
+
+    @ApiOperation("Find all movies")
+    @GetMapping
+    public ResponseEntity<Response<List<Movie>>> findAllMovies() {
+        List<Movie> movieList = movies.findAll();
+
+        if (movieList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("No movies found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(movieList));
     }
 
     @ApiOperation("Add a movie")

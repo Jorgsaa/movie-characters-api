@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -27,6 +28,20 @@ public class CharacterController {
                 .orElse(ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body(new Response<>("Character with the specified id was not found")));
+    }
+
+    @ApiOperation("Find all characters")
+    @GetMapping
+    public ResponseEntity<Response<List<Character>>> findAllCharacters() {
+        List<Character> characterList = characters.findAll();
+
+        if (characterList.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("No characters found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(characterList));
     }
 
     @ApiOperation("Add a character")
