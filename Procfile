@@ -1,1 +1,0 @@
-web: java -jar target/movie-characters-api-0.0.1-SNAPSHOT.jar -Dserver.port=$PORT
