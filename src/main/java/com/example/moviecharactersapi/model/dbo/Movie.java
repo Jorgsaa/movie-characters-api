@@ -67,9 +67,7 @@ public class Movie {
         return franchise.getName();
     }
 
-
     public void removeCharacter(Character character) {
         characters.remove(character);
     }
-
 }

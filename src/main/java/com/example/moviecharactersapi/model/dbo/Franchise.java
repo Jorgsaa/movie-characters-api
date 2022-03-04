@@ -27,14 +27,6 @@ public class Franchise {
     @Column(length = 80)
     private String description;
 
-    //@OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-   // @JoinColumn(name = "movie_id", referencedColumnName = "id", nullable = true)
-    /*@OneToMany(
-            mappedBy = "post",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<PostComment> comments = new ArrayList<>();*/
     @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
     private List<Movie> movies;
@@ -43,5 +35,4 @@ public class Franchise {
     public List<String> movies() {
         return movies.stream().map(Movie::getTitle).collect(Collectors.toList());
     }
-
 }
