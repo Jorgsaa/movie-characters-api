@@ -105,11 +105,13 @@ public class FranchiseController {
     @ApiOperation("Find movies by franchise id")
     @GetMapping("/{id}/movies")
     public ResponseEntity<Response<Set<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
-        if (!franchises.existsById(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new Response<>("Franchise with the specified id was not found"));
-        }
-
-        return ResponseEntity.ok(new Response<>(franchises.findById(id).get().getMovies()));
+        return franchises.findById(id).map(
+                franchise -> ResponseEntity.ok(new Response<>(franchise.getMovies()))
+        ).orElse(
+                // Franchise was not found
+                ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Franchise with the specified id was not found"))
+        );
     }
+
 }
