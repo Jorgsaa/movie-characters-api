@@ -105,6 +105,7 @@ public class FranchiseController {
     @GetMapping("/{id}/movies")
     public ResponseEntity<Response<List<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
         if(!franchises.existsById(id)) {
+            // Movie not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Franchise with the specified id was not found"));
         }

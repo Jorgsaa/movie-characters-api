@@ -28,8 +28,14 @@ public class Franchise {
     private String description;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "franchise_id")
     private List<Movie> movies;
+
+    @PreRemove
+    private void preRemove() {
+        movies.forEach( movie -> movie.setFranchise(null));
+    }
 
     @JsonGetter
     public List<String> movies() {
