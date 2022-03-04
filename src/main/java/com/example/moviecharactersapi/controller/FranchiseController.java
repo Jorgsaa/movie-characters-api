@@ -112,4 +112,32 @@ public class FranchiseController {
 
         return ResponseEntity.ok(new Response<>(franchises.findById(id).get().getMovies()));
     }
+
+    @ApiOperation("Update movies related to a franchise, by id")
+    @PatchMapping("{id}/movies")
+    public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
+            @PathVariable Integer id,
+            @RequestBody List<Movie> movieList
+    ) {
+        for (Movie movie: movieList) {
+            if (movies.findById(movie.getId()).isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Movie with the specified id was not found"));
+            }
+        }
+        if (franchises.findById(id).isPresent()) {
+            Franchise franchise = franchises.findById(id).get();
+            franchise.setMovies(movieList);
+            Franchise patchedFranchise = franchises.save(franchise);
+
+            return ResponseEntity
+                    .accepted()
+                    .body(new Response<>(patchedFranchise));
+        }
+        
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new Response<>("Franchise with the specified id was not found"));
+    }
 }
