@@ -20,19 +20,19 @@ public class Character {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String firstName;
 
-    @Column
+    @Column(length = 40)
     private String lastName;
 
-    @Column
+    @Column(length = 40)
     private String alias;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String gender;
 
-    @Column
+    @Column(length = 200)
     private String pictureURL;
 
     @Singular
