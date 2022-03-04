@@ -65,9 +65,9 @@ public class Movie {
     private Franchise franchise;
 
     @JsonGetter
-    public String franchise() {
+    public Integer franchise() {
         if(franchise != null)
-            return franchise.getId().toString();
+            return franchise.getId();
         else
             return null;
     }
