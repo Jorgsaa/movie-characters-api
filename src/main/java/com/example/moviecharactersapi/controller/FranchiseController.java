@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -106,16 +107,15 @@ public class FranchiseController {
 
     @ApiOperation("Find movies by franchise id")
     @GetMapping("/{id}/movies")
-    public ResponseEntity<Response<List<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
-        if(!franchises.existsById(id)) {
-            // Franchise not found
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new Response<>("Franchise with the specified id was not found"));
-        }
-
-        return ResponseEntity.ok(new Response<>(franchises.findById(id).get().getMovies()));
+    public ResponseEntity<Response<Set<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
+        return franchises.findById(id).map(
+                franchise -> ResponseEntity.ok(new Response<>(franchise.getMovies()))
+        ).orElse(
+                // Franchise was not found
+                ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Franchise with the specified id was not found"))
+        );
     }
-
   
     @ApiOperation("Find characters by franchise id")
     @GetMapping("/{id}/characters")

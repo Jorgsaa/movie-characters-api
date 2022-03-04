@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -27,10 +27,12 @@ public class Franchise {
     @Column(length = 80)
     private String description;
 
+    @Singular
     @JsonIgnore
+  
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "franchise_id")
-    private List<Movie> movies;
+    private Set<Movie> movies;
 
     @PreRemove
     private void preRemove() {
@@ -38,7 +40,7 @@ public class Franchise {
     }
 
     @JsonGetter
-    public List<String> movies() {
-        return movies.stream().map(Movie::getTitle).collect(Collectors.toList());
+    public Set<String> movies() {
+        return movies.stream().map(Movie::getTitle).collect(Collectors.toSet());
     }
 }
