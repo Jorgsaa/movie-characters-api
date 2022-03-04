@@ -58,9 +58,15 @@ public class Movie {
         }).collect(Collectors.toSet());
     }
 
-    @ManyToOne
-    @JoinColumn(name = "franchise_id", referencedColumnName = "id", nullable = true)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     private Franchise franchise;
+
+    @JsonGetter
+    public String franchise() {
+        return franchise.getName();
+    }
+
 
     public void removeCharacter(Character character) {
         characters.remove(character);
