@@ -1,8 +1,10 @@
 package com.example.moviecharactersapi.controller;
 
+import com.example.moviecharactersapi.model.dbo.Character;
 import com.example.moviecharactersapi.model.dbo.Franchise;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
+import com.example.moviecharactersapi.repository.CharacterRepository;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import com.example.moviecharactersapi.repository.MovieRepository;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +25,7 @@ public class FranchiseController {
 
     private final FranchiseRepository franchises;
     private final MovieRepository movies;
+    private final CharacterRepository characters;
 
     @ApiOperation("Find a franchise by id")
     @GetMapping("/{id}")
@@ -113,5 +116,44 @@ public class FranchiseController {
                         .body(new Response<>("Franchise with the specified id was not found"))
         );
     }
+  
+    @ApiOperation("Find characters by franchise id")
+    @GetMapping("/{id}/characters")
+    public ResponseEntity<Response<List<Character>>> findCharactersByFranchiseId(@PathVariable Integer id) {
+        if(!franchises.existsById(id)) {
+            // Franchise not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Franchise with the specified id was not found"));
+        }
 
+        return ResponseEntity.ok(new Response<>(characters.findCharactersByFranchise(id)));
+    }
+
+    @ApiOperation("Update movies related to a franchise, by id")
+    @PatchMapping("{id}/movies")
+    public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
+            @PathVariable Integer id,
+            @RequestBody List<Movie> movieList
+    ) {
+        for (Movie movie: movieList) {
+            if (movies.findById(movie.getId()).isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Movie with the specified id was not found"));
+            }
+        }
+        if (franchises.findById(id).isPresent()) {
+            Franchise franchise = franchises.findById(id).get();
+            franchise.setMovies(movieList);
+            Franchise patchedFranchise = franchises.save(franchise);
+
+            return ResponseEntity
+                    .accepted()
+                    .body(new Response<>(patchedFranchise));
+        }
+        
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new Response<>("Franchise with the specified id was not found"));
+    }
 }

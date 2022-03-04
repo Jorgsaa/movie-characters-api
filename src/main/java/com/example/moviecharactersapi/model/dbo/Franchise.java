@@ -29,8 +29,15 @@ public class Franchise {
 
     @Singular
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
-    private Set<Movie> movies = new LinkedHashSet<>();
+  
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "franchise_id")
+    private Set<Movie> movies;
+
+    @PreRemove
+    private void preRemove() {
+        movies.forEach( movie -> movie.setFranchise(null));
+    }
 
     @JsonGetter
     public Set<String> movies() {
