@@ -3,6 +3,7 @@ package com.example.moviecharactersapi.model.dbo;
 import com.example.moviecharactersapi.model.dto.NamedResourceDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,9 +25,11 @@ public class Character {
     @Column(nullable = false)
     private String firstName;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column
     private String lastName;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column
     private String alias;
 
