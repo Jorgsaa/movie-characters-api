@@ -1,11 +1,13 @@
 package com.example.moviecharactersapi.model.dbo;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,4 +26,13 @@ public class Franchise {
 
     @Column(length = 80)
     private String description;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
+    private List<Movie> movies;
+
+    @JsonGetter
+    public List<String> movies() {
+        return movies.stream().map(Movie::getTitle).collect(Collectors.toList());
+    }
 }

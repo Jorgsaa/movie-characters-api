@@ -58,8 +58,16 @@ public class Movie {
         }).collect(Collectors.toSet());
     }
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Franchise franchise;
+
+    @JsonGetter
+    public String franchise() {
+        return franchise.getName();
+    }
+
     public void removeCharacter(Character character) {
         characters.remove(character);
     }
-
 }
