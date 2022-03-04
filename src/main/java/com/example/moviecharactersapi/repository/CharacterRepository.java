@@ -5,15 +5,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CharacterRepository extends JpaRepository<Character, Integer> {
+
     @Query("""
             SELECT DISTINCT c FROM Character c
             INNER JOIN c.movies movie
             INNER JOIN movie.franchise franchise
             WHERE franchise.id = ?1
             """)
-    List<Character> findCharactersByFranchise(Integer franchiseId);
+    Set<Character> findCharactersByFranchise(Integer franchiseId);
 }

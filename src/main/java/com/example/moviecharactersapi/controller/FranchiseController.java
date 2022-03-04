@@ -119,8 +119,8 @@ public class FranchiseController {
   
     @ApiOperation("Find characters by franchise id")
     @GetMapping("/{id}/characters")
-    public ResponseEntity<Response<List<Character>>> findCharactersByFranchiseId(@PathVariable Integer id) {
-        if(!franchises.existsById(id)) {
+    public ResponseEntity<Response<Set<Character>>> findCharactersByFranchiseId(@PathVariable Integer id) {
+        if (!franchises.existsById(id)) {
             // Franchise not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Franchise with the specified id was not found"));
@@ -133,7 +133,7 @@ public class FranchiseController {
     @PatchMapping("{id}/movies")
     public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
             @PathVariable Integer id,
-            @RequestBody List<Movie> movieList
+            @RequestBody Set<Movie> movieList
     ) {
         for (Movie movie: movieList) {
             if (movies.findById(movie.getId()).isEmpty()) {

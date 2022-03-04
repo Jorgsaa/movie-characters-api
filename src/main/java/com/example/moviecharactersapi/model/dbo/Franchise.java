@@ -29,10 +29,9 @@ public class Franchise {
 
     @Singular
     @JsonIgnore
-  
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "franchise_id")
-    private Set<Movie> movies;
+    private Set<Movie> movies = new LinkedHashSet<>();
 
     @PreRemove
     private void preRemove() {
