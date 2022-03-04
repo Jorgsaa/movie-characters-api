@@ -3,6 +3,7 @@ package com.example.moviecharactersapi.model.dbo;
 import com.example.moviecharactersapi.model.dto.NamedResourceDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.*;
@@ -68,6 +69,7 @@ public class Movie {
     @JoinColumn(name = "franchise_id")
     private Franchise franchise;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonGetter
     public NamedResourceDTO franchise() {
         if (franchise != null)
