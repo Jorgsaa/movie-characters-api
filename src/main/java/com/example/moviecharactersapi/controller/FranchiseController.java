@@ -118,11 +118,18 @@ public class FranchiseController {
     @PatchMapping("{id}/movies")
     public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
             @PathVariable Integer id,
-            @RequestBody List<Movie> movies
+            @RequestBody List<Movie> movieList
     ) {
+        for (Movie movie: movieList) {
+            if (movies.findById(movie.getId()).isEmpty()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new Response<>("Movie with the specified id was not found"));
+            }
+        }
         if (franchises.findById(id).isPresent()) {
             Franchise franchise = franchises.findById(id).get();
-            franchise.setMovies(movies);
+            franchise.setMovies(movieList);
             Franchise patchedFranchise = franchises.save(franchise);
 
             return ResponseEntity
