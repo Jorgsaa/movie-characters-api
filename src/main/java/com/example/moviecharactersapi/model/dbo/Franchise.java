@@ -29,7 +29,7 @@ public class Franchise {
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>();
 
     @JsonGetter
     public List<String> movies() {
