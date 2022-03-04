@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -60,11 +61,15 @@ public class Movie {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "franchise_id")
     private Franchise franchise;
 
     @JsonGetter
     public String franchise() {
-        return franchise.getName();
+        if(franchise != null)
+            return franchise.getId().toString();
+        else
+            return null;
     }
 
     public void removeCharacter(Character character) {
