@@ -1,11 +1,11 @@
 package com.example.moviecharactersapi.model.dbo;
 
+import com.example.moviecharactersapi.model.dto.NamedResourceDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,14 +48,18 @@ public class Movie {
     private Set<Character> characters = new java.util.LinkedHashSet<>();
 
     @JsonGetter
-    public Set<String> characters() {
+    public Set<NamedResourceDTO> characters() {
         return characters.stream().map(c -> {
             StringBuilder name = new StringBuilder(c.getFirstName());
 
             if (c.getLastName() != null)
                 name.append(" ").append(c.getLastName());
 
-            return name.toString();
+            return new NamedResourceDTO(
+                    c.getId(),
+                    name.toString(),
+                    "/api/v1/character/" + c.getId()
+            );
         }).collect(Collectors.toSet());
     }
 
@@ -65,9 +69,13 @@ public class Movie {
     private Franchise franchise;
 
     @JsonGetter
-    public Integer franchise() {
-        if(franchise != null)
-            return franchise.getId();
+    public NamedResourceDTO franchise() {
+        if (franchise != null)
+            return new NamedResourceDTO(
+                    franchise.getId(),
+                    franchise.getName(),
+                    "/api/v1/franchise/" + franchise.getId()
+            );
         else
             return null;
     }
@@ -75,4 +83,5 @@ public class Movie {
     public void removeCharacter(Character character) {
         characters.remove(character);
     }
+
 }

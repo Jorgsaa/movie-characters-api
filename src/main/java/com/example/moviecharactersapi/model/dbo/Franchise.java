@@ -1,5 +1,6 @@
 package com.example.moviecharactersapi.model.dbo;
 
+import com.example.moviecharactersapi.model.dto.NamedResourceDTO;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
@@ -39,7 +40,11 @@ public class Franchise {
     }
 
     @JsonGetter
-    public Set<String> movies() {
-        return movies.stream().map(Movie::getTitle).collect(Collectors.toSet());
+    public Set<NamedResourceDTO> movies() {
+        return movies.stream().map(movie -> new NamedResourceDTO(
+                movie.getId(),
+                movie.getTitle(),
+                "/api/v1/movie/" + movie.getId()
+        )).collect(Collectors.toSet());
     }
 }
