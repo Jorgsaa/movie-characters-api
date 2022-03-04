@@ -2,10 +2,8 @@ package com.example.moviecharactersapi.model.dbo;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +22,7 @@ public class Franchise {
 
     @Column(length = 80)
     private String description;
+
+    @OneToMany(mappedBy = "franchise")
+    private List<Movie> movies;
 }

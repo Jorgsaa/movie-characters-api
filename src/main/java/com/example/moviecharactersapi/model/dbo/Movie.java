@@ -58,6 +58,10 @@ public class Movie {
         }).collect(Collectors.toSet());
     }
 
+    @ManyToOne
+    @JoinColumn(name = "franchise_id", referencedColumnName = "id", nullable = false)
+    private Franchise franchise;
+
     public void removeCharacter(Character character) {
         characters.remove(character);
     }
