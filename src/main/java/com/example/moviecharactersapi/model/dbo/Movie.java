@@ -59,7 +59,7 @@ public class Movie {
     }
 
     @ManyToOne
-    @JoinColumn(name = "franchise_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "franchise_id", referencedColumnName = "id", nullable = true)
     private Franchise franchise;
 
     public void removeCharacter(Character character) {
