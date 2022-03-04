@@ -1,8 +1,10 @@
 package com.example.moviecharactersapi.controller;
 
+import com.example.moviecharactersapi.model.dbo.Character;
 import com.example.moviecharactersapi.model.dbo.Franchise;
 import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
+import com.example.moviecharactersapi.repository.CharacterRepository;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
 import com.example.moviecharactersapi.repository.MovieRepository;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,7 @@ public class FranchiseController {
 
     private final FranchiseRepository franchises;
     private final MovieRepository movies;
+    private final CharacterRepository characters;
 
     @ApiOperation("Find a franchise by id")
     @GetMapping("/{id}")
@@ -105,12 +108,25 @@ public class FranchiseController {
     @GetMapping("/{id}/movies")
     public ResponseEntity<Response<List<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
         if(!franchises.existsById(id)) {
-            // Movie not found
+            // Franchise not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Franchise with the specified id was not found"));
         }
 
         return ResponseEntity.ok(new Response<>(franchises.findById(id).get().getMovies()));
+    }
+
+  
+    @ApiOperation("Find characters by franchise id")
+    @GetMapping("/{id}/characters")
+    public ResponseEntity<Response<List<Character>>> findCharactersByFranchiseId(@PathVariable Integer id) {
+        if(!franchises.existsById(id)) {
+            // Franchise not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Franchise with the specified id was not found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(characters.findCharactersByFranchise(id)));
     }
 
     @ApiOperation("Update movies related to a franchise, by id")
