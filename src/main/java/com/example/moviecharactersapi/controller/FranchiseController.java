@@ -1,8 +1,10 @@
 package com.example.moviecharactersapi.controller;
 
 import com.example.moviecharactersapi.model.dbo.Franchise;
+import com.example.moviecharactersapi.model.dbo.Movie;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.FranchiseRepository;
+import com.example.moviecharactersapi.repository.MovieRepository;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,6 +21,7 @@ import java.util.List;
 public class FranchiseController {
 
     private final FranchiseRepository franchises;
+    private final MovieRepository movies;
 
     @ApiOperation("Find a franchise by id")
     @GetMapping("/{id}")
@@ -98,4 +101,14 @@ public class FranchiseController {
         return ResponseEntity.accepted().body(new Response<>(true));
     }
 
+    @ApiOperation("Find movies by franchise id")
+    @GetMapping("/{id}/movies")
+    public ResponseEntity<Response<List<Movie>>> findMoviesByFranchiseId(@PathVariable Integer id) {
+        if(!franchises.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new Response<>("Franchise with the specified id was not found"));
+        }
+
+        return ResponseEntity.ok(new Response<>(franchises.findById(id).get().getMovies()));
+    }
 }
