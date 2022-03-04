@@ -3,6 +3,12 @@ package com.example.moviecharactersapi.controller;
 import com.example.moviecharactersapi.model.dbo.Character;
 import com.example.moviecharactersapi.model.dto.Response;
 import com.example.moviecharactersapi.repository.CharacterRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
+import com.github.fge.jsonpatch.diff.JsonDiff;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,6 +25,7 @@ import java.util.List;
 public class CharacterController {
 
     private final CharacterRepository characters;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @ApiOperation("Find a character by id")
     @GetMapping("{id}")
@@ -66,23 +73,27 @@ public class CharacterController {
     @PatchMapping("{id}")
     public ResponseEntity<Response<Character>> updateCharacterById(
             @PathVariable Integer id,
-            @RequestBody(required = false) Character character
+            @RequestBody JsonNode patch
     ) {
-        if (character == null) {
-            return ResponseEntity.badRequest()
-                    .body(new Response<>("Invalid character object supplied"));
-        }
-
         if (!characters.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new Response<>("Character with the specified id was not found"));
         }
 
-        character.setId(id);
+        Character originalCharacter = characters.findById(id).get();
 
-        Character patchedCharacter = characters.save(character);
+        Character characterPatched;
+        try {
+            JsonNode originalAsJson = objectMapper.valueToTree(originalCharacter);
+            JsonPatch patchDiff = JsonDiff.asJsonPatch(originalAsJson, patch);
+            characterPatched = applyPatchToCharacter(patchDiff, originalCharacter);
+            characters.save(characterPatched);
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.internalServerError().body(new Response<>("Internal server error, failed to patch character"));
+        }
 
-        return ResponseEntity.accepted().body(new Response<>(patchedCharacter));
+        return ResponseEntity.accepted().body(new Response<>(characterPatched));
     }
 
     @ApiOperation("Delete a character by id")
@@ -101,4 +112,8 @@ public class CharacterController {
         return ResponseEntity.accepted().body(new Response<>(true));
     }
 
+    private Character applyPatchToCharacter(JsonPatch patch, Character targetCharacter) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetCharacter, JsonNode.class));
+        return objectMapper.treeToValue(patched, Character.class);
+    }
 }

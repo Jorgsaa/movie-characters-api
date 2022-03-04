@@ -30,6 +30,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
+
+    // https://mvnrepository.com/artifact/com.github.java-json-tools/json-patch
+    implementation group: 'com.github.java-json-tools', name: 'json-patch', version: '1.13'
 }
 
 tasks.named('test') {
