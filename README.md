@@ -2,6 +2,8 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
+[Heroku](https://jorgsaa-movie-characters-api.herokuapp.com/swagger-ui/index.html)
+
 Movie character REST API built using:
 - Spring Boot
 - Hibernate
