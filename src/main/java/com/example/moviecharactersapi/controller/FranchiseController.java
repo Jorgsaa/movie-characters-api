@@ -133,7 +133,7 @@ public class FranchiseController {
     @PatchMapping("{id}/movies")
     public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
             @PathVariable Integer id,
-            @RequestBody List<Movie> movieList
+            @RequestBody Set<Movie> movieList
     ) {
         for (Movie movie: movieList) {
             if (movies.findById(movie.getId()).isEmpty()) {
