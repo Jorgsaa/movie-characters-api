@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,7 +30,7 @@ public class Franchise {
     @Singular
     @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
-    private List<Movie> movies = new ArrayList<>();
+    private Set<Movie> movies = new LinkedHashSet<>();
 
     @JsonGetter
     public Set<String> movies() {
