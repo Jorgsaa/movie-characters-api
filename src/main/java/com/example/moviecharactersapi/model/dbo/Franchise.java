@@ -7,6 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -27,12 +28,13 @@ public class Franchise {
     @Column(length = 80)
     private String description;
 
+    @Singular
     @JsonIgnore
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "franchise")
     private List<Movie> movies = new ArrayList<>();
 
     @JsonGetter
-    public List<String> movies() {
-        return movies.stream().map(Movie::getTitle).collect(Collectors.toList());
+    public Set<String> movies() {
+        return movies.stream().map(Movie::getTitle).collect(Collectors.toSet());
     }
 }
