@@ -118,14 +118,16 @@ public class FranchiseController {
     @PatchMapping("{id}/movies")
     public ResponseEntity<Response<Franchise>> updateFranchiseMoviesById(
             @PathVariable Integer id,
-            @RequestBody Set<Movie> movies
+            @RequestBody List<Movie> movies
     ) {
         if (franchises.findById(id).isPresent()) {
             Franchise franchise = franchises.findById(id).get();
-            
+            franchise.setMovies(movies);
+            Franchise patchedFranchise = franchises.save(franchise);
+
             return ResponseEntity
                     .accepted()
-                    .body(new Response<>("Franchise with the specified id was found"));
+                    .body(new Response<>(patchedFranchise));
         }
         
         return ResponseEntity
