@@ -22,22 +22,22 @@ public class Movie {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 25)
     private String genre;
 
     @Column(nullable = false)
     private Integer releaseYear;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String director;
 
-    @Column
+    @Column(length = 200)
     private String pictureURL;
 
-    @Column
+    @Column(length = 200)
     private String trailerURL;
 
     @Singular
